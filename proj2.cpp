@@ -2,8 +2,6 @@
 #include<omp.h>
 using namespace cv;
 
-
-
 void conv(float* output, float* input, float filter[], float bias[], int size, int channel, int kernel, int sample)
 {
 #pragma omp parallel for
@@ -20,17 +18,17 @@ void conv(float* output, float* input, float filter[], float bias[], int size, i
                     int m = k * 3 * 3 * channel + c * 3 * 3;//index of filter
                     int p = c * size * size + i * sample * size + j * sample;//index of input
                         //左上角补0
-                        if (i == 0 && j == 0)
-                        {
+                    if (i == 0 && j == 0)
+                    {
                             output[q] += filter[m + 4] * input[p]//中
                                 + filter[m + 5] * input[p + 1]//右
                                 + filter[m + 7] * input[p + size]//下
                                 + filter[m + 8] * input[p + size + 1];//右下
                             continue;
-                        }
-                        //第一行补0
-                        if (i == 0)
-                        {
+                     }
+                     //第一行补0
+                     if (i == 0)
+                     {
                             output[q] += filter[m + 3] * input[p - 1]//左
                                 + filter[m + 4] * input[p]//中
                                 + filter[m + 5] * input[p + 1]//右
@@ -38,10 +36,10 @@ void conv(float* output, float* input, float filter[], float bias[], int size, i
                                 + filter[m + 7] * input[p + size]//下
                                 + filter[m + 8] * input[p + size + 1];//右下
                             continue;
-                        }
-                        //第一列补0
-                        if (j == 0)
-                        {
+                     }
+                     //第一列补0
+                     if (j == 0)
+                     {
                             output[q] += +filter[m + 1] * input[p - size]//上
                                 + filter[m + 2] * input[p - size + 1]//右上
                                 + filter[m + 4] * input[p]//中
@@ -49,8 +47,8 @@ void conv(float* output, float* input, float filter[], float bias[], int size, i
                                 + filter[m + 7] * input[p + size]//下
                                 + filter[m + 8] * input[p + size + 1];//右下
                             continue;
-                        }
-                        output[q] += filter[m] * input[p - size - 1]//左上
+                     }
+                     output[q] += filter[m] * input[p - size - 1]//左上
                             + filter[m + 1] * input[p - size]//上
                             + filter[m + 2] * input[p - size + 1]//右上
                             + filter[m + 3] * input[p - 1]//左
